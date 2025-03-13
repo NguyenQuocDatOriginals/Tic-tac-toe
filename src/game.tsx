@@ -26,13 +26,12 @@ const Game: React.FC = () => {
 
     // Hàm kiểm tra chiến thắng với điều kiện 5 dấu liền nhau
     const checkWinner = (): Player | 'Draw' | null => {
-      // Duyệt từng ô làm điểm bắt đầu
       for (let i = 0; i < GRID_COUNT; i++) {
         for (let j = 0; j < GRID_COUNT; j++) {
           const cell = board[i][j];
           if (cell === null) continue;
 
-          // Kiểm tra ngang (hàng)
+          // Kiểm tra theo hàng ngang
           if (j <= GRID_COUNT - 5) {
             let win = true;
             for (let k = 1; k < 5; k++) {
@@ -44,7 +43,7 @@ const Game: React.FC = () => {
             if (win) return cell;
           }
 
-          // Kiểm tra dọc (cột)
+          // Kiểm tra theo cột dọc
           if (i <= GRID_COUNT - 5) {
             let win = true;
             for (let k = 1; k < 5; k++) {
@@ -81,11 +80,8 @@ const Game: React.FC = () => {
           }
         }
       }
-
-      // Nếu không còn ô trống và chưa có người thắng thì hòa
-      const isDraw = board.every(row => row.every(cell => cell !== null));
-      if (isDraw) return 'Draw';
-
+      // Nếu tất cả các ô đã được điền mà không có người thắng thì trả về hòa
+      if (board.flat().every(cell => cell !== null)) return 'Draw';
       return null;
     };
 
@@ -156,7 +152,7 @@ const Game: React.FC = () => {
       if (gameState === 'start') {
         ctx.fillText('Nhấn để chơi', CANVAS_SIZE / 2, CANVAS_SIZE / 2);
       } else if (gameState === 'play') {
-        ctx.fillText(`Lượt của: ${currentPlayer}`, CANVAS_SIZE / 2, 30);
+        ctx.fillText(`Lượt của ${currentPlayer}`, CANVAS_SIZE / 2, 30);
       } else if (gameState === 'end') {
         if (winner === 'Draw') {
           ctx.fillText('Hòa!', CANVAS_SIZE / 2, 30);
